@@ -51,7 +51,7 @@ define php::module (
   $service_autorestart = '',
   $module_prefix       = '',
   $absent              = '',
-  $package             = $php::package
+  $package             = '',
   ) {
 
   include php
@@ -83,13 +83,18 @@ define php::module (
 
   $real_install_package = "${real_module_prefix}${name}"
 
+  $real_php_package = $package ? {
+    ''      => $php::package,
+    default => $package,
+  }
+
   if defined(Package[$real_install_package]) == false {
     package { "PhpModule_${name}":
       ensure          => $real_version,
       name            => $real_install_package,
       notify          => $real_service_autorestart,
       install_options => $real_install_options,
-      require         => Package[$package],
+      require         => Package[$real_php_package],
     }
   }
 

@@ -28,6 +28,9 @@ describe 'php::module' do
     it 'should notify the default service' do
       should contain_package('PhpModule_ps').with_notify('Service[apache2]')
     end
+    it 'should depend on xenial PHP' do
+      should contain_package('PhpModule_ps').that_requires('Package[php7.0-cli]')
+    end
   end
 
   describe 'Test custom params' do
