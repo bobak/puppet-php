@@ -16,6 +16,20 @@ describe 'php::module' do
     end
   end
 
+  describe 'Test standard installation on Ubuntu 16.04 xenial' do
+  let(:facts) { {
+    'operatingsystem' => 'Ubuntu',
+    'lsbdistcodename' => 'xenial'
+    } }
+    let(:params) { { 'name' =>  'ps', } }
+    it 'should create a package with the default OS prefix' do
+      should contain_package('PhpModule_ps').with_name('php-ps')
+    end
+    it 'should notify the default service' do
+      should contain_package('PhpModule_ps').with_notify('Service[apache2]')
+    end
+  end
+
   describe 'Test custom params' do
     let(:params) { { 'name' =>  'ps', 'module_prefix' => 'my-' , 'service_autorestart' => false } }
     it 'should create a package with custom prefix' do
